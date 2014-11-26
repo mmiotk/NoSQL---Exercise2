@@ -380,7 +380,7 @@ W **rmongodb** nie można wywołać takiego grupowania (nie ma polecenia mongo.g
 |4|0m1.108s  |0m2.077s | 0m2.294s|
 |5|0m0.732s | -| 0m1.872s|
 
-![IMAGE](raw/master/pictures/Aggregations.png)
+![mms](pictures/Aggregations.png)
 
 Statystyka
 
