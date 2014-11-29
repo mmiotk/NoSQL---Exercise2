@@ -24,7 +24,7 @@ Do eksperymentu wykorzystałem jedynie 1/3 tych danych. Jednak aby zapisać je w
 
 Przetworzone dane są w następującej postaci: 
 
-```
+```js
 {
   "_id": ObjectId("546a54bc4fd537d62c6731c6"),
   "originalText": "what a world cup",
@@ -74,12 +74,12 @@ Interesować nas będą następujące pytania:
 #####Przypadek 1: javascript.
 Wykonuje to skrypt **first.js**.
 
-```
+```js
 var options = {allowDiskUse: true, cursor: {batchSize: 4}};
-var project = { $project: {text: 1, _id: 0}};
-var unwind = { $unwind: "$text"};
-var group = { $group: {_id: "$text", ilosc: {$sum : 1}}};
-var sort = { $sort: {ilosc: -1}};
+var project = {$project: {text: 1, _id: 0}};
+var unwind = {$unwind: "$text"};
+var group = {$group: {_id: "$text", ilosc: {$sum : 1}}};
+var sort = {$sort: {ilosc: -1}};
 var limit = {$limit: 5};
 
 var cursor = db.marta.aggregate([
@@ -94,7 +94,7 @@ var cursor = db.marta.aggregate([
 
 Wyjście: 
 
-```
+```js
 { "_id" : "the", "ilosc" : 1363202 }
 Średnia wynosi:  1.363202
 { "_id" : "to", "ilosc" : 606073 }
@@ -110,21 +110,19 @@ Wyjście:
 #####Przypadek 2: rmongodb
 Wykonuje to skrypt: **first.R**
 
-```
+```r
 mongo <- mongo.create()
 
 if(mongo.is.connected(mongo)){
-      mongo.get.databases(mongo)
-      coll = mongo.get.database.collections(mongo,"test")
-       project = mongo.bson.from.JSON('{ "$project": {"text": 1, "_id": 0}}')
-       unwind = mongo.bson.from.JSON('{ "$unwind": "$text"}')
-       group =  mongo.bson.from.JSON('{ "$group": {"_id": "$text", "ilosc": {"$sum" : 1}}}')
-       sort = mongo.bson.from.JSON('{ "$sort": {"ilosc": -1}}')
-       limit = mongo.bson.from.JSON('{"$limit": 5}')
-      
-       cmdList = list(project,unwind,group,sort,limit)
-
-       result = mongo.aggregation(mongo,"test.marta",cmdList)
+  mongo.get.databases(mongo)
+  coll = mongo.get.database.collections(mongo,"test")
+  project = mongo.bson.from.JSON('{ "$project": {"text": 1, "_id": 0}}')
+  unwind = mongo.bson.from.JSON('{ "$unwind": "$text"}')
+  group =  mongo.bson.from.JSON('{ "$group": {"_id": "$text", "ilosc": {"$sum" : 1}}}')
+  sort = mongo.bson.from.JSON('{ "$sort": {"ilosc": -1}}')
+  limit = mongo.bson.from.JSON('{"$limit": 5}')
+  cmdList = list(project,unwind,group,sort,limit)
+  result = mongo.aggregation(mongo,"test.marta",cmdList)
 ...
 ```
 
@@ -143,11 +141,11 @@ and  and  537527
 #####Przypadek 1: javascript
 Wykonuje to skrypt **second.js**
 
-```
+```js
 var options = {allowDiskUse: true, cursor: {batchSize: 4}};
-var group = { $group: {_id: "$howWords", count: {$sum: 1}} };
-var sort = { $sort: {count: -1}};
-var sort2 = { $sort: {_id: -1}};
+var group = {$group: {_id: "$howWords", count: {$sum: 1}} };
+var sort = {$sort: {count: -1}};
+var sort2 = {$sort: {_id: -1}};
 var limit = {$limit: 1};
 
 var cursor = db.marta.aggregate([
@@ -161,7 +159,7 @@ var cursor = db.marta.aggregate([
 
 Wynik:
 
-```
+```js
 { "_id" : 1643, "count" : 1 }
 Najdłuższa sentencja posiada  1643  słów
 ```
@@ -169,20 +167,16 @@ Najdłuższa sentencja posiada  1643  słów
 #####Przypadek 2: rmongodb
 Wykonuje to skrypt **Second.R**
 
-```
+```r
 if(mongo.is.connected(mongo)){
-      mongo.get.databases(mongo)
-      coll = mongo.get.database.collections(mongo,"test")
-
-      group =  mongo.bson.from.JSON('{ "$group": {"_id": "$howWords", "count": {"$sum": 1}} }')
-      sort = mongo.bson.from.JSON('{ "$sort": {"count": -1}}')
-      sort2 = mongo.bson.from.JSON('{ "$sort": {"_id": -1}}')
-      limit = mongo.bson.from.JSON('{"$limit": 5}')
-      
-      cmdList = list(group,sort,sort2,limit)
-      
-      result = mongo.aggregation(mongo,"test.marta",cmdList)
-
+  mongo.get.databases(mongo)
+  coll = mongo.get.database.collections(mongo,"test")
+  group =  mongo.bson.from.JSON('{ "$group": {"_id": "$howWords", "count": {"$sum": 1}} }')
+  sort = mongo.bson.from.JSON('{ "$sort": {"count": -1}}')
+  sort2 = mongo.bson.from.JSON('{ "$sort": {"_id": -1}}')
+  limit = mongo.bson.from.JSON('{"$limit": 5}')
+  cmdList = list(group,sort,sort2,limit)
+  result = mongo.aggregation(mongo,"test.marta",cmdList)
 ```
 
 Wynik: 
@@ -196,10 +190,10 @@ Wynik:
 #####Przypadek 1: javascript
 Wykonuje to skrypt: **third.js**
 
-```
+```js
 var options = {allowDiskUse: true, cursor: {batchSize: 4}};
-var group = { $group: {_id: "$howWords", count: {$sum: 1}} };
-var sort = { $sort: {count: -1}};
+var group = {$group: {_id: "$howWords", count: {$sum: 1}} };
+var sort = {$sort: {count: -1}};
 var limit = {$limit: 5};
 
 var cursor = db.marta.aggregate([
@@ -212,7 +206,7 @@ var cursor = db.marta.aggregate([
 
 Wynik: 
 
-```
+```js
 { "_id" : 19, "count" : 37134 }
 Sentencji z 19 słowami jest  37134
 Stanowi to 4 % wszystkich sentencji
@@ -234,20 +228,17 @@ Stanowi to 4 % wszystkich sentencji
 
 Wykonuje to skrypt: Third.R
 
-```
+```r
 ...
 if(mongo.is.connected(mongo)){
-      mongo.get.databases(mongo)
-      coll = mongo.get.database.collections(mongo,"test")
-            
-      group =  mongo.bson.from.JSON('{ "$group": {"_id": "$howWords", "count": {"$sum": 1}} }')
-      sort = mongo.bson.from.JSON('{ "$sort": {"count": -1}}')
-      limit = mongo.bson.from.JSON('{"$limit": 5}')
-      
-      cmdList = list(group,sort,limit)
-      
-      result = mongo.aggregation(mongo,"test.marta",cmdList)
-      ...
+  mongo.get.databases(mongo)
+  coll = mongo.get.database.collections(mongo,"test")
+  group =  mongo.bson.from.JSON('{ "$group": {"_id": "$howWords", "count": {"$sum": 1}} }')
+  sort = mongo.bson.from.JSON('{ "$sort": {"count": -1}}')
+  limit = mongo.bson.from.JSON('{"$limit": 5}')
+  cmdList = list(group,sort,limit)
+  result = mongo.aggregation(mongo,"test.marta",cmdList)
+...
 ```
 
 Wynik: 
@@ -267,10 +258,10 @@ Wynik:
 #####Przypadek 1: javascript
 Wykonuje to skrypt: **four.js**
 
-```
+```js
 var options = {allowDiskUse: true, cursor: {batchSize: 4}};
-var group = { $group: {_id: "$howWords", count: {$sum: 1}} };
-var sort = { $sort: {_id: 1}};
+var group = {$group: {_id: "$howWords", count: {$sum: 1}} };
+var sort = {$sort: {_id: 1}};
 var limit = {$limit: 5};
 
 var cursor = db.marta.aggregate([
@@ -278,12 +269,12 @@ var cursor = db.marta.aggregate([
   sort,
   limit
   ], options);
-  ...
+...
 ```
 
 Wynik:
 
-```
+```js
 { "_id" : 2, "count" : 2236 }
 { "_id" : 3, "count" : 4400 }
 { "_id" : 4, "count" : 7126 }
@@ -296,18 +287,16 @@ Wynik:
 
 Wykonuje to skrypt: **Four.R**
 
-```
+```r
 ...
 if(mongo.is.connected(mongo)){
-      mongo.get.databases(mongo)
-      coll = mongo.get.database.collections(mongo,"test")
-      
-      group =  mongo.bson.from.JSON('{ "$group": {"_id": "$howWords", "count": {"$sum": 1}} }')
-      sort = mongo.bson.from.JSON('{ "$sort": {"_id": 1}}')
-      limit = mongo.bson.from.JSON('{"$limit": 5}')
-      
-      cmdList = list(group,sort,limit)
-      result = mongo.aggregation(mongo,"test.marta",cmdList)
+  mongo.get.databases(mongo)
+  coll = mongo.get.database.collections(mongo,"test")
+  group =  mongo.bson.from.JSON('{ "$group": {"_id": "$howWords", "count": {"$sum": 1}} }')
+  sort = mongo.bson.from.JSON('{ "$sort": {"_id": 1}}')
+  limit = mongo.bson.from.JSON('{"$limit": 5}')
+  cmdList = list(group,sort,limit)
+  result = mongo.aggregation(mongo,"test.marta",cmdList)
 ...
 ```
 
@@ -329,20 +318,23 @@ Wynik:
 
 Wykonuje to skrypt: **five.js**
 
-```
-var result = db.marta.group({
-  cond: {"numberSentence": {$gte: 2503, $lt: 2508}}
-  , key: {numberSentence: true}
-  , initial: {total_words_len: 0}
-  , reduce: function(doc, out) { out.total_words_len += doc.text.length; }
-  , finalize: function(out) { out.total_words_len }
+```js
+var result = db.marta.group(
+  {
+    cond: {
+      "numberSentence": {$gte: 2503, $lt: 2508}
+    },
+    key: {numberSentence: true},
+    initial: {total_words_len: 0},
+    reduce: function(doc, out) { out.total_words_len += doc.text.length; },
+    finalize: function(out) { out.total_words_len }
 } );
 
 ```
 
 Wynik:
 
-```
+```js
 [
       {
 		"numberSentence" : 2503,
@@ -384,7 +376,7 @@ W **rmongodb** nie można wywołać takiego grupowania (nie ma polecenia mongo.g
 
 Statystyka
 
-```
+```js
 {
   "ns": "test.marta",
   "count": 999360,
