@@ -28,6 +28,12 @@ Wersja PostgreSQL: 9.3.5
 Do wykonania zadania 2 wykorzystałem bazę danych ze strony **kaggle.com**, które zawiera około 3 milionów sentencji angielskich.
 Do eksperymentu wykorzystałem jedynie 1/3 tych danych. Jednak aby zapisać je w bazie MongoDB należy wstępnie przetworzyć te dane. Wykonuje to przy pomocy języka R.
 
+####Odnośnik do danych ze strony kaggle.com
+```html
+https://www.kaggle.com/c/billion-word-imputation
+```
+[Bilion-word-imputation](https://www.kaggle.com/c/billion-word-imputation)
+
 ####Format danych
 
 Przetworzone dane są w następującej postaci: 
